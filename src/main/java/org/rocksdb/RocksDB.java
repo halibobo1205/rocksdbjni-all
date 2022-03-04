@@ -44,7 +44,21 @@ public class RocksDB extends RocksObject {
    * setting the environment variable ROCKSDB_SHAREDLIB_DIR.
    */
   public static void loadLibrary() {
+    if (libraryLoaded.get() == LibraryState.LOADED) {
+      return;
+    }
+    // loading possibly necessary libraries.
+    for (final CompressionType compressionType : CompressionType.values()) {
+      try {
+        if (compressionType.getLibraryName() != null) {
+          System.loadLibrary(compressionType.getLibraryName());
+        }
+      } catch (UnsatisfiedLinkError e) {
+        // since it may be optional, we ignore its loading failure here.
+      }
+    }
     LIBRARY.load();
+    libraryLoaded.set(LibraryState.LOADED);
   }
 
   /**
