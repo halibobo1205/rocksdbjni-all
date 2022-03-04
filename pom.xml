@@ -49,6 +49,7 @@
     <forge-project-id-uc>ROCKSDBJNI</forge-project-id-uc>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <hawtjni-version>1.18</hawtjni-version>
+    <rocksdb-api-version>5.15.10</rocksdb-api-version>
     <junit-version>4.13.1</junit-version>
   </properties>
   
@@ -60,6 +61,11 @@
       <groupId>org.fusesource.hawtjni</groupId>
       <artifactId>hawtjni-runtime</artifactId>
       <version>${hawtjni-version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.rocksdb</groupId>
+      <artifactId>rocksdbjni</artifactId>
+      <version>${rocksdb-api-version}</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -140,10 +146,13 @@
             <Bundle-Name>${project.artifactId}</Bundle-Name>
             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
             <Export-Package>
-             <!-- !org.rocksdb.RocksDB;version=${rocksdb-api-version};-split-package:=merge-last-->
+             <!-- !org.rocksdb.RocksDB;version=${rocksdb-api-version};-split-package:=merge-first,-->
             </Export-Package>
-            <Import-Package></Import-Package>
-            <DynamicImport-Package></DynamicImport-Package>
+            <Import-Package>
+             <!-- !org.rocksdb.RocksDB;version=${rocksdb-api-version};-split-package:=first-->
+            </Import-Package>
+            <Private-Package>org.rocksdb.*;-split-package:=merge-first</Private-Package>
+            <DynamicImport-Package/>
             <Implementation-Title>RocksDB JNI</Implementation-Title>
             <Implementation-Version>${project.version}</Implementation-Version>
             <Embed-Dependency>
